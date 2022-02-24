@@ -53,9 +53,7 @@ function App() {
           setImageAsUrl([url, ...imageAsUrl]);
           setImageAsFile('')
           setProgress(null)
-        }).catch(err){
-          console.log({Error:err.message});
-        }
+        }).catch((err)=>console.log({Error:err.message}))
       })
     
   }
