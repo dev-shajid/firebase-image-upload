@@ -46,14 +46,16 @@ function App() {
         setProgress(progress)
       }, 
       (error) => {
-        console.log(error);
+        console.log({error});
       }, () => {
         // complete function
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImageAsUrl([url, ...imageAsUrl]);
-          setImageAsFile(null)
+          setImageAsFile('')
           setProgress(null)
-        })
+        }).catch(err){
+          console.log({Error:err.message});
+        }
       })
     
   }
