@@ -52,7 +52,7 @@ function App() {
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           setImageAsUrl([url, ...imageAsUrl]);
           setImageAsFile('')
-          setProgress(null)
+          setProgress()
         }).catch((err)=>console.log({Error:err.message}))
       })
     
