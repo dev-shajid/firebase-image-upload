@@ -9,7 +9,7 @@ import {PhotoCamera} from '@mui/icons-material';
 
 function App() {
   const [imageAsFile, setImageAsFile] = useState('')
-  const [imageAsUrl, setImageAsUrl] = useState(JSON.parse(localStorage.getItem('images')))
+  const [imageAsUrl, setImageAsUrl] = useState(JSON.parse(localStorage.getItem('images')) || [])
   const [progress, setProgress] = useState(null)
 
   useEffect(() => {
