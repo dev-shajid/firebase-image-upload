@@ -69,7 +69,7 @@ function App() {
           {/* </IconButton> */}
         </label>}
         
-        {imageAsFile && <Button className='upload_button' variant="contained" onClick={handleFireBaseUpload}>
+        {imageAsFile && !progress && <Button className='upload_button' variant="contained" onClick={handleFireBaseUpload}>
             Upload
         </Button>}
       </div>
