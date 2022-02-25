@@ -1,63 +1,21 @@
 import {useEffect, useState} from 'react'
 import './App.css';
-import { storage } from './firebase';
-import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import { Button, LinearProgress, Box, Typography } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
 import {PhotoCamera} from '@mui/icons-material';
+import useFirebaseHook from './useFirebaseHook';
 
 function App() {
   const [imageAsFile, setImageAsFile] = useState('')
   const [imageAsUrl, setImageAsUrl] = useState(JSON.parse(localStorage.getItem('images')) || [])
-  const [progress, setProgress] = useState(null)
+
+  //TODO: Custom Hook to store image in firebase
+  const {handleImageAsFile, handleFireBaseUpload, progress} = useFirebaseHook(imageAsFile, setImageAsFile, setImageAsUrl, 'images')
 
   useEffect(() => {
     localStorage.setItem("images", JSON.stringify(imageAsUrl))
   }, [imageAsUrl])
-  
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem('images'))
-    console.log(data);
-  },[])
-
-  const handleImageAsFile = (e) => {
-        const image = e.target.files[0]
-        const type=image.type.split('/')[1]
-        console.log(type === 'png' || type ==='jpg' || type==='jpeg');
-        if(type === 'png' || type ==='jpg' || type==='jpeg') {
-          setImageAsFile(image)
-        } else {
-          alert("Only JPG, JPEG, PNG format is suported")
-        }
-  }
-
-  const handleFireBaseUpload = (e) => {
-    e.preventDefault()
-    console.log('start of upload')
-
-    const storageRef=ref(storage, `images/${imageAsFile.name}`)
-    const uploadTask = uploadBytesResumable(storageRef, imageAsFile)
-
-    uploadTask.on('state_changed', 
-      (snapshot) => {
-        // progress function
-        const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-        setProgress(progress)
-      }, 
-      (error) => {
-        console.log({error});
-      }, () => {
-        // complete function
-        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
-          console.log(url);
-          setImageAsUrl([url, ...imageAsUrl]);
-          setImageAsFile('')
-          setProgress()
-        }).catch((err)=>console.log({Error:err}))
-      })
-    
-  }
 
   return (
     <div className="App">
