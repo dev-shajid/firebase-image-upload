@@ -7,6 +7,7 @@ import {PhotoCamera} from '@mui/icons-material';
 import useFirebaseHook from './useFirebaseHook';
 
 function App() {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
   const [imageAsFile, setImageAsFile] = useState('')
   const [imageAsUrl, setImageAsUrl] = useState(JSON.parse(localStorage.getItem('images')) || [])
 
@@ -24,6 +25,13 @@ function App() {
       localStorage.setItem("images", JSON.stringify(imageAsUrl))
     }
   }, [])
+
+  useEffect(() => {
+    function handleResize() {
+      setScreenWidth(window.innerWidth)   
+    }
+    window.addEventListener('resize', handleResize)
+  })
 
   return (
     <div className="App">
@@ -53,7 +61,7 @@ function App() {
       </Box> : <div style={{marginTop:"20px"}}></div>}
 
       <Box sx={{ width: "100%", minHeight: 829, marginTop:"20px" }}>
-        <Masonry columns={3} spacing={2}>
+        <Masonry columns={screenWidth>=700?3:2} spacing={screenWidth>=700?2:1}>
           {imageAsUrl?.map((item, index) => (
             <div key={index}>
               <img
